@@ -61,13 +61,14 @@ for i in range(len(arrPlayers)):
         nickname = input("Write the name you want for {}:\t".format(arrPlayers[i]))
         arrPlayers[i] = nickname
 
-players = {key : value for (key, value) in zip(arrPlayers,[0 for i in arrPlayers])}
+players = {key : value for (key, value) in zip(arrPlayers,[10 for i in arrPlayers])}
 print(players)
 
 # Pick a random phrase and display it
 phrases = ["Mi konas vin ekde la lasta somero", "Ni kisas la katidojn sur la cxapo", "La cxapelo estas tre granda por la infano"]
 selPhrase = random.choice(phrases)
 print(selPhrase)
+phraseList = selPhrase.split()
 
 # Turn it into a hidden phrase
 def createHiddenPhrase(phrase):
@@ -103,7 +104,7 @@ def makeGuess(guess, originalPhrase, hiddenPhrase):
                         # Copies the exact letter according to original phrase
                         newWord += phraseList[i][j]
                     else:
-                        newWord += "_"
+                        newWord += hiddenPhrase[i][j]
                 hiddenPhrase[i] = newWord
         displayHiddenPhrase(hiddenPhrase)
     else:
@@ -120,9 +121,43 @@ This is the phrase you must guess:
 """)
 displayHiddenPhrase(hiddenList)
 
-print("Now guess {}".format(arrPlayers[0]))
-guess = input()
+# Checks if players can still make a guess
+def playersStillGuess(players):
+    sum = 0
+    for i in players.values():
+        sum += i
+    if sum <= 0:
+        return False
+    return True
+# Check if a specified player can guess
+def playerCanGuess(players, player):
+    return players[player] > 0
+
+# decrease tries for player
+def decreaseTries(players, player):
+    players[player] -= 1
+
+# compares original list with guess list
+def comparesToGuess(originalList, guessList):
+    for i in range(len(originalList)):
+        if originalList[i] != guessList:
+            return False
+    return True
+# Ask the players to make a guess until they can't or the whole phrase is uncovered
+while(hiddenList != phraseList and playersStillGuess(players)):
+    idPlayer = 0
+    currentPlayer = arrPlayers[idPlayer]
+
+    if playerCanGuess(players, currentPlayer):
+        print("Now guess {}".format(currentPlayer))
+        guess = input()[0]
+        original = hiddenList
+        hiddenList = makeGuess(guess, selPhrase, hiddenList)
+        # Compares the previous version of the Hidden List with the one when the player makes a guess
+        if not comparesToGuess(original, hiddenList):
+            decreaseTries(players, currentPlayer)
+            print(players)
+            continue
 
 
-hiddenList = makeGuess(guess, selPhrase, hiddenList)
 
