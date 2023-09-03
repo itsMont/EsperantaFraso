@@ -137,27 +137,41 @@ def playerCanGuess(players, player):
 def decreaseTries(players, player):
     players[player] -= 1
 
+# copies content from a list to another list
+def copyList(original):
+    newList = []
+    for i in original:
+        newList.append(i)
+    return newList
+
 # compares original list with guess list
 def comparesToGuess(originalList, guessList):
     for i in range(len(originalList)):
-        if originalList[i] != guessList:
+        if originalList[i] != guessList[i]:
             return False
     return True
 # Ask the players to make a guess until they can't or the whole phrase is uncovered
-while(hiddenList != phraseList and playersStillGuess(players)):
-    idPlayer = 0
+idPlayer = 0
+while(not comparesToGuess(phraseList, hiddenList) and playersStillGuess(players)):
+    # Get the nickname of the player
     currentPlayer = arrPlayers[idPlayer]
-
-    if playerCanGuess(players, currentPlayer):
+    while playerCanGuess(players, currentPlayer):
         print("Now guess {}".format(currentPlayer))
+        # Receives the first character of the word it gets
         guess = input()[0]
-        original = hiddenList
+        # Need to compare the original hideen List to the one after the player makesa a guess
+        original = copyList(hiddenList)
+        # Update the hiddenList with the guess of the player
         hiddenList = makeGuess(guess, selPhrase, hiddenList)
         # Compares the previous version of the Hidden List with the one when the player makes a guess
-        if not comparesToGuess(original, hiddenList):
+        # if the previous version of hidden list is the same as the current one, then the guess was invalid
+        if comparesToGuess(original, hiddenList):
             decreaseTries(players, currentPlayer)
             print(players)
-            continue
+            break
+        if comparesToGuess(phraseList, hiddenList):
+            break
+    idPlayer = (idPlayer + 1) % numPlayers
 
 
 
