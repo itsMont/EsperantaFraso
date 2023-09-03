@@ -70,46 +70,59 @@ selPhrase = random.choice(phrases)
 print(selPhrase)
 
 # Turn it into a hidden phrase
-hiddenPhrase = ""
-for i in selPhrase:
-    if i != ' ':
-        hiddenPhrase += "_"
+def createHiddenPhrase(phrase):
+    hiddenPhrase = ""
+    for i in phrase:
+        if i != ' ':
+            hiddenPhrase += "_"
+        else:
+            hiddenPhrase += i
+    return hiddenPhrase.split()
+
+# Receives a hiddenPhrase as a list and prints it
+def displayHiddenPhrase(hidden):
+    for i in hidden:
+        print(i, end = " ")
+    print("\n\n")
+
+# This makes a guess and returns the hidden phraese with the character guesses uncovered
+def makeGuess(guess, originalPhrase, hiddenPhrase):
+    # It doesnt matter if the guess is in lowercase or uppercase
+    lowerOriginalPhrase = originalPhrase.lower()
+    guess = guess.lower()
+
+    # keep a list with original characters
+    phraseList = originalPhrase.split()
+
+    if guess in lowerOriginalPhrase:
+        for i in range(len(phraseList)):
+            if guess in phraseList[i].lower():
+                newWord = ""
+                for j in range(len(phraseList[i])):
+                    if phraseList[i][j].lower() == guess:
+                        # Copies the exact letter according to original phrase
+                        newWord += phraseList[i][j]
+                    else:
+                        newWord += "_"
+                hiddenPhrase[i] = newWord
+        displayHiddenPhrase(hiddenPhrase)
     else:
-        hiddenPhrase += i
+        print("'{}' It's not in the phrase".format(guess))
+    return hiddenPhrase
+
+hiddenList = createHiddenPhrase(selPhrase)
+
 print("""
 
 
 This is the phrase you must guess: 
 
-
-{}
-""".format(hiddenPhrase))
+""")
+displayHiddenPhrase(hiddenList)
 
 print("Now guess {}".format(arrPlayers[0]))
 guess = input()
 
-phraseList = selPhrase.split()
-hiddenList = hiddenPhrase.split()
-print(phraseList)
-print(hiddenList)
-if guess in selPhrase:
-    for i in range(len(phraseList)):
-        if guess in phraseList[i]:
-            newWord = ""
-            for j in range(len(phraseList[i])):
-                
-                if phraseList[i][j] == guess:
-                    newWord += guess
-                else:
-                    newWord += "_"
-            hiddenList[i] = newWord
-                    
-    print(hiddenList)
-   
-else:
-    print("'{}' It's not in the phrase".format(guess))
 
-for i in hiddenList:
-    print(i, end = " ")
-print()
+hiddenList = makeGuess(guess, selPhrase, hiddenList)
 
