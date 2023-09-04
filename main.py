@@ -61,7 +61,7 @@ introduce(players)
 # Pick a random phrase and display it
 phrases = ["Mi konas vin ekde la lasta somero", "Ni kisas la katidojn sur la cxapo", "La cxapelo estas tre granda por la infano"]
 selPhrase = random.choice(phrases)
-print(selPhrase)
+
 phraseList = selPhrase.split()
 
 hiddenList = createHiddenPhrase(selPhrase)

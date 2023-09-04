@@ -10,7 +10,7 @@ def getNumPlayers():
 def introduce(players):
     print("\n")
     for i in players:
-        print(i + " points: ", players[i], end = " | ")
+        print(i + " tries: ", players[i], end = " | ")
     print("\n\n")
 # Turn it into a hidden phrase
 def createHiddenPhrase(phrase):
