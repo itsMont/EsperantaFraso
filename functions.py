@@ -6,7 +6,12 @@ def getNumPlayers():
         print("Bonvolu registri validan nombron / Please input a valid number")
         return 0
     return numPlayers
-
+# introduce players!
+def introduce(players):
+    print("\n")
+    for i in players:
+        print(i + " points: ", players[i], end = " | ")
+    print("\n\n")
 # Turn it into a hidden phrase
 def createHiddenPhrase(phrase):
     hiddenPhrase = ""
@@ -19,6 +24,7 @@ def createHiddenPhrase(phrase):
 
 # Receives a hiddenPhrase as a list and prints it
 def displayHiddenPhrase(hidden):
+    print("\n")
     for i in hidden:
         print(i, end = " ")
     print("\n\n")

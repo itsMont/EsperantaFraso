@@ -43,22 +43,21 @@ while(numPlayers <= 0 or numPlayers > 3):
     if numPlayers == 0:
         print("Devas esti almenaux unu ludanto / There must be at least one player")
     if numPlayers > 3 or numPlayers < 0:
-        print("Registri validan nombron: 1, 2, 3")
+        print("Registri validan nombron: 1, 2, 3 / Input a valid number: 1, 2, 3")
 
 # Create array of Players with points for each one
 arrPlayers = ["player" + str(i+1) for i in range(numPlayers) ]
 
-
 # You can use a nickname instead of generic game nicknames
 for i in range(len(arrPlayers)):
-    response = input("Cxu vi volas nomi {} with a nickname? [Y]es / [N]o:\t".format(arrPlayers[i]))
+    response = input("Cxu vi volas nomi {player} uzantonomo / Do you want to name {player} with a nickname? [Y]es / [N]o:\t".format(player = arrPlayers[i]))
     if response == 'y' or response == 'Y':
         nickname = input("Write the name you want for {}:\t".format(arrPlayers[i]))
         arrPlayers[i] = nickname
 
+# Create a players dictionary {'nickanme': available tries}
 players = {key : value for (key, value) in zip(arrPlayers,[10 for i in arrPlayers])}
-print(players)
-
+introduce(players)
 # Pick a random phrase and display it
 phrases = ["Mi konas vin ekde la lasta somero", "Ni kisas la katidojn sur la cxapo", "La cxapelo estas tre granda por la infano"]
 selPhrase = random.choice(phrases)
@@ -96,7 +95,7 @@ while(not comparesToGuess(phraseList, hiddenList) and playersStillGuess(players)
         # if the previous version of hidden list is the same as the current one, then the guess was invalid
         if comparesToGuess(original, hiddenList):
             decreaseTries(players, currentPlayer)
-            print(players)
+            introduce(players)
             break
         # In case the player guess the last chasracter to be guessed
         if comparesToGuess(phraseList, hiddenList):
