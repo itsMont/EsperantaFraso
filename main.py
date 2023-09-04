@@ -1,105 +1,9 @@
 # Prezentu la ludon al la ludistoj
 import random
-def getNumPlayers():
-    try:
-        numPlayers = int(input())
-    except:
-        print("Bonvolu registri validan nombron / Please input a valid number")
-        return 0
-    return numPlayers
-
-# Turn it into a hidden phrase
-def createHiddenPhrase(phrase):
-    hiddenPhrase = ""
-    for i in phrase:
-        if i != ' ':
-            hiddenPhrase += "_"
-        else:
-            hiddenPhrase += i
-    return hiddenPhrase.split()
-
-# Receives a hiddenPhrase as a list and prints it
-def displayHiddenPhrase(hidden):
-    for i in hidden:
-        print(i, end = " ")
-    print("\n\n")
-
-# This makes a guess and returns the hidden phraese with the character guesses uncovered
-def makeGuess(guess, originalPhrase, hiddenPhrase):
-    # It doesnt matter if the guess is in lowercase or uppercase
-    lowerOriginalPhrase = originalPhrase.lower()
-    guess = guess.lower()
-
-    # keep a list with original characters
-    phraseList = originalPhrase.split()
-
-    if guess in lowerOriginalPhrase:
-        for i in range(len(phraseList)):
-            if guess in phraseList[i].lower():
-                newWord = ""
-                for j in range(len(phraseList[i])):
-                    if phraseList[i][j].lower() == guess:
-                        # Copies the exact letter according to original phrase
-                        newWord += phraseList[i][j]
-                    else:
-                        newWord += hiddenPhrase[i][j]
-                hiddenPhrase[i] = newWord
-    else:
-        print("'{}' It's not in the phrase".format(guess))
-    displayHiddenPhrase(hiddenPhrase)
-    return hiddenPhrase
-
-# Checks if players can still make a guess
-def playersStillGuess(players):
-    sum = 0
-    for i in players.values():
-        sum += i
-    if sum <= 0:
-        return False
-    return True
-# Check if a specified player can guess
-def playerCanGuess(players, player):
-    return players[player] > 0
-
-# decrease tries for player
-def decreaseTries(players, player):
-    players[player] -= 1
-
-# copies content from a list to another list
-def copyList(original):
-    newList = []
-    for i in original:
-        newList.append(i)
-    return newList
-
-# compares original list with guess list
-def comparesToGuess(originalList, guessList):
-    for i in range(len(originalList)):
-        if originalList[i] != guessList[i]:
-            return False
-    return True
-
-# function to receive the guess input correctly:
-def receiveGuess():
-    receive = True
-    while receive:
-        try:
-            guess = input()[0]
-            # In case user inputs a number or whatsoever
-            if len(guess) > 1:
-                raise RuntimeError
-            if not guess.isalpha():
-                raise ValueError
-            receive = False
-
-        except ValueError:
-            print("La esperanta frazo ne havas nombrojn / The esperanto phrase doesn't have a number")
-
-        except:
-            print("Faru validan divenon / Make a valid guess.")
-    return guess
+from functions import *
 
 numPlayers = 0
+
 print("""
 
 
@@ -133,7 +37,7 @@ ENGLISH:
 
 # Get number of players: from 1 to 3
 print("Diru al mi la nombron de ludantoj (Max. 3): / Tell me the number of players (Max. 3): ")
-
+# Receives the correct number of players. Minimum 1 player and Maximum 3 players
 while(numPlayers <= 0 or numPlayers > 3):
     numPlayers = getNumPlayers()
     if numPlayers == 0:
@@ -147,7 +51,7 @@ arrPlayers = ["player" + str(i+1) for i in range(numPlayers) ]
 
 # You can use a nickname instead of generic game nicknames
 for i in range(len(arrPlayers)):
-    response = input("Cxu vi volas nomi {} with a nickname? y/n:\t".format(arrPlayers[i]))
+    response = input("Cxu vi volas nomi {} with a nickname? [Y]es / [N]o:\t".format(arrPlayers[i]))
     if response == 'y' or response == 'Y':
         nickname = input("Write the name you want for {}:\t".format(arrPlayers[i]))
         arrPlayers[i] = nickname
@@ -166,7 +70,7 @@ hiddenList = createHiddenPhrase(selPhrase)
 print("""
 
 
-This is the phrase you must guess: 
+Cxi tiu estas la frazo kiu vi devas diveni / This is the phrase you must guess: 
 
 """)
 displayHiddenPhrase(hiddenList)
@@ -201,9 +105,15 @@ while(not comparesToGuess(phraseList, hiddenList) and playersStillGuess(players)
 
 # if the players didn't guess the whole phrase then there's no winner
 if not comparesToGuess(phraseList, hiddenList):
-    print("Nenius gajnas. Neniu divenis / It's a tie. Nobody guess")
+    print("Nenius gajnas. Neniu divenis / It's a tie. Nobody guess\n\n")
     print("La esperanta frazo estis: / The Esperanto Phrase was:")
     print(selPhrase)
+
 else:
-    print("Gratulon {}!, vi gajnis/ Congrats {}!, you won".format(winner,winner))
+    print("""
+
+    Gratulon {winner}!, vi gajnis/ Congrats {winner}!, you won
+
+
+    """.format(winner = winner))
 
