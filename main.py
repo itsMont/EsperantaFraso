@@ -106,9 +106,9 @@ def makeGuess(guess, originalPhrase, hiddenPhrase):
                     else:
                         newWord += hiddenPhrase[i][j]
                 hiddenPhrase[i] = newWord
-        displayHiddenPhrase(hiddenPhrase)
     else:
         print("'{}' It's not in the phrase".format(guess))
+    displayHiddenPhrase(hiddenPhrase)
     return hiddenPhrase
 
 hiddenList = createHiddenPhrase(selPhrase)
@@ -152,9 +152,13 @@ def comparesToGuess(originalList, guessList):
     return True
 # Ask the players to make a guess until they can't or the whole phrase is uncovered
 idPlayer = 0
+# Create an empty string to save the winner nickname
+winner = ""
 while(not comparesToGuess(phraseList, hiddenList) and playersStillGuess(players)):
     # Get the nickname of the player
     currentPlayer = arrPlayers[idPlayer]
+    originalTries = players[currentPlayer]
+    winner = currentPlayer
     while playerCanGuess(players, currentPlayer):
         print("Now guess {}".format(currentPlayer))
         # Receives the first character of the word it gets
@@ -173,5 +177,11 @@ while(not comparesToGuess(phraseList, hiddenList) and playersStillGuess(players)
             break
     idPlayer = (idPlayer + 1) % numPlayers
 
-
+# if the players didn't guess the whole phrase then there's no winner
+if not comparesToGuess(phraseList, hiddenList):
+    print("Nenius gajnas. Neniu divenis / It's a tie. Nobody guess")
+    print("La esperanta frazo estis: / The Esperanto Phrase was:")
+    print(selPhrase)
+else:
+    print("Gratulon {}!, vi gajnis / Congrats {}!, you won".format(winner,winner))
 
